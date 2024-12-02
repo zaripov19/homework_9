@@ -6,21 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.lang.Module;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Course {
+public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String name;
 
-    public Course(String name) {
-        this.name = name;
-    }
+    @ManyToOne
+    private Course course;
 
 
 }
