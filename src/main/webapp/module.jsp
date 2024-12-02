@@ -69,7 +69,10 @@
     </style>
 </head>
 <body>
-
+<%
+    String id = request.getParameter("courseId");
+    Integer courseId = Integer.parseInt(id);
+%>
 <div class="container">
     <!-- Table to display courses -->
     <div class="row justify-content-center mt-5">
@@ -89,11 +92,15 @@
                     List<Module> modules = ModuleRepo.getAllModules();
                     if (modules != null && !modules.isEmpty()) {
                         for (Module module : modules) {
+                            if (module.getCourse().getId() == (courseId)) { // Corrected condition
                 %>
                 <tr>
-                    <td><%= module.getId() %></td>
-                    <td><%= module.getName() %></td>
-                    <td><%= module.getCourse().getName() %></td> <!-- Display course name -->
+                    <td><%= module.getId() %>
+                    </td>
+                    <td><%= module.getName() %>
+                    </td>
+                    <td><%= module.getCourse().getName() %>
+                    </td> <!-- Display course name -->
                     <td>
                         <a href="/group.jsp?moduleId=<%= module.getId() %>" class="btn btn-dark">Go</a>
                     </td>
@@ -105,6 +112,7 @@
                     </td>
                 </tr>
                 <%
+                        }
                     }
                 } else {
                 %>
