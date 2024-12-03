@@ -2,6 +2,8 @@
 <%@ page import="com.example.homework_9.ModuleRepo" %>
 <%@ page import="com.example.homework_9.entity.AppModule" %>
 <%@ page import="java.util.Optional" %>
+<%@ page import="com.example.homework_9.entity.AppGroup" %>
+<%@ page import="com.example.homework_9.GroupRepo" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,22 +86,21 @@
 </head>
 <body>
 <%
-    // courseId parametrini olish va uni int ga o'zgartirish
-    String id = request.getParameter("courseId");
-    Integer courseId = Integer.parseInt(id);
+    // moduleId parametrini olish va uni int ga o'zgartirish
+    String id = request.getParameter("moduleId");
+    Integer moduleId = Integer.parseInt(id);
 
-    // Modules ro'yxatini olish
-    List<AppModule> modules = ModuleRepo.getAllModules();
+    // Guruhlarni olish
+    List<AppGroup> groups = GroupRepo.getAllGroups();  // Method nomi to'g'ri o'zgartirildi
 %>
 <div class="container">
 
     <!-- Button to add module -->
     <div class="row justify-content-center mt-4">
         <div class="col-md-6 text-center">
-            <a class="btn btn-warning btn-lg" href="AddGroup.jsp">Add Group</a>
+            <a class="btn btn-warning btn-lg" href="AddStudent.jsp">Add Student</a>
         </div>
     </div>
-
 
     <div class="row justify-content-center mt-5">
         <div class="col-md-8">
@@ -113,32 +114,32 @@
                     <tr>
                         <th>Id</th>
                         <th>Name</th>
-                        <th>Course Name</th>
-                        <th>Go to Group</th>
+                        <th>Module Name</th>
+                        <th>Go to Students</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <%
-                        // Modules mavjudligini tekshirish
-                        if (modules != null && !modules.isEmpty()) {
-                            for (AppModule module : modules) {
-                                // Kurs id bilan taqqoslash
-                                if (module.getCourse().getId() == (courseId)) {
+                        // Guruhlar mavjudligini tekshirish
+                        if (groups != null && !groups.isEmpty()) {
+                            for (AppGroup group : groups) {
+                                // Module id bilan taqqoslash
+                                if (group.getAppModule() != null && group.getAppModule().getId().equals(moduleId)) {
                     %>
                     <tr>
-                        <td><%= module.getId() %>
+                        <td><%= group.getId() %>
                         </td>
-                        <td><%= module.getName() %>
+                        <td><%= group.getName() %>
                         </td>
-                        <td><%= module.getCourse().getName() %>
-                        </td>
-                        <td>
-                            <a href="/group.jsp?moduleId=<%= module.getId() %>" class="btn btn-dark btn-sm">Go</a>
+                        <td><%= group.getAppModule().getName() %>
                         </td>
                         <td>
-                            <form action="/module/delete" method="post" class="d-inline">
-                                <input type="hidden" name="moduleId" value="<%= module.getId() %>">
+                            <a href="/group.jsp?groupId=<%= group.getId() %>" class="btn btn-dark btn-sm">Go</a>
+                        </td>
+                        <td>
+                            <form action="/group/delete" method="post" class="d-inline">
+                                <input type="hidden" name="groupId" value="<%= group.getId() %>">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
                         </td>
@@ -149,7 +150,7 @@
                     } else {
                     %>
                     <tr>
-                        <td colspan="5" class="text-muted">No modules available</td>
+                        <td colspan="5" class="text-muted">No groups available</td>
                     </tr>
                     <%
                         }

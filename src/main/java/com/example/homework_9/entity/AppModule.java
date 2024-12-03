@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Module {
+public class AppModule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -19,5 +19,8 @@ public class Module {
     @ManyToOne
     private Course course;
 
-
+    public AppModule(String name, Course course) {
+        this.name = name;
+        this.course = course;
+    }
 }

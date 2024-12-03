@@ -1,6 +1,6 @@
 package com.example.homework_9.servlets;
 
-import com.example.homework_9.entity.Module;
+import com.example.homework_9.entity.AppModule;
 import jakarta.persistence.EntityManager;
 
 import javax.servlet.ServletException;
@@ -16,33 +16,34 @@ import static com.example.homework_9.MyListener.emf;
 public class DeleteModuleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String moduleId = req.getParameter("moduleId");
+        if (moduleId == null || moduleId.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Module ID is required.");
+            return;
+        }
+
+        Integer id;
+        try {
+            id = Integer.parseInt(moduleId);
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid module ID.");
+            return;
+        }
+
         try (EntityManager entityManager = emf.createEntityManager()) {
-            // Fetch the moduleId parameter from the request
-            String moduleId = req.getParameter("moduleId");
-            Integer id = Integer.parseInt(moduleId); // Convert moduleId to Integer
-
-            // Find the module entity by its ID
-            Module module = entityManager.find(Module.class, id);
-
-            if (module != null) {
-                // Begin transaction
+            AppModule appModule = entityManager.find(AppModule.class, id);
+            if (appModule != null) {
                 entityManager.getTransaction().begin();
-
-                // Remove the module
-                entityManager.remove(module);
-
-                // Commit the transaction to complete deletion
+                entityManager.remove(appModule);
                 entityManager.getTransaction().commit();
 
-                // Redirect to the page with updated module list
                 resp.sendRedirect("/module.jsp");
             } else {
-                // If module does not exist, send error
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Module not found.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error deleting module.");
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error deleting module: " + e.getMessage());
         }
     }
 }

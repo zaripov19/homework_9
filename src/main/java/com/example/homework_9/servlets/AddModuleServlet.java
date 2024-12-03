@@ -1,7 +1,7 @@
 package com.example.homework_9.servlets;
 
 import com.example.homework_9.entity.Course;
-import com.example.homework_9.entity.Module;
+import com.example.homework_9.entity.AppModule;
 import jakarta.persistence.EntityManager;
 
 import javax.servlet.ServletException;
@@ -48,7 +48,7 @@ public class AddModuleServlet extends HttpServlet {
             // Begin transaction, persist module
             entityManager.getTransaction().begin();
             try {
-                Module module = new Module(
+                AppModule module = new AppModule(
                         null,
                         name,
                         course

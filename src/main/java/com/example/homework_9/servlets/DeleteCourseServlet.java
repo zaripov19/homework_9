@@ -1,7 +1,7 @@
 package com.example.homework_9.servlets;
 
+import com.example.homework_9.entity.AppModule;
 import com.example.homework_9.entity.Course;
-import com.example.homework_9.entity.Module;
 import jakarta.persistence.EntityManager;
 
 import javax.servlet.ServletException;
@@ -24,12 +24,12 @@ public class DeleteCourseServlet extends HttpServlet {
             Course course = entityManager.find(Course.class, id);
 
             // Check for dependent modules
-            List<Module> modules = entityManager.createQuery("SELECT m FROM Module m WHERE m.course.id = :courseId", Module.class)
+            List<AppModule> modules = entityManager.createQuery("SELECT m FROM AppModule m WHERE m.course.id = :courseId", AppModule.class)
                     .setParameter("courseId", id)
                     .getResultList();
 
             // Delete dependent modules if they exist
-            for (Module module : modules) {
+            for (AppModule module : modules) {
                 entityManager.remove(module);
             }
 
