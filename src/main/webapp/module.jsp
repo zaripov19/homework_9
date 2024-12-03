@@ -71,7 +71,7 @@
 <body>
 <%
     String id = request.getParameter("courseId");
-    Integer courseId = Integer.parseInt(id);
+    int courseId = Integer.parseInt(id);
 %>
 <div class="container">
     <!-- Table to display courses -->
@@ -89,7 +89,7 @@
                 </thead>
                 <tbody>
                 <%
-                    List<Module> modules = ModuleRepo.getAllModules();
+                    List<Module> modules = ModuleRepo.getModulesByCourseId(courseId);
                     if (modules != null && !modules.isEmpty()) {
                         for (Module module : modules) {
                             if (module.getCourse().getId() == (courseId)) { // Corrected condition
